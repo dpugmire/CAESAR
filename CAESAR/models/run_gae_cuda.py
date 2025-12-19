@@ -1,6 +1,5 @@
 import torch
 import numpy as np
-import cupy as cp
 
 import numpy as np
 # from sklearn.decomposition import PCA
@@ -16,9 +15,6 @@ import time
 import zstandard as zstd
 import torch
 from tqdm import tqdm
-
-import nvidia.nvcomp as nvcomp
-import cupy as cp
 
 import os
 import json
@@ -52,6 +48,7 @@ class PCA:
         self.device = torch.device(device)
         self.components_ = None
         self.mean_ = None
+        print('GAE device: ', self.device)
 
     def fit(self, X: torch.Tensor):
         X = X.to(self.device)                      
@@ -321,6 +318,9 @@ class PCACompressor:
                 
         
         else:
+            import nvidia.nvcomp as nvcomp
+            import cupy as cp
+            
             codec = nvcomp.Codec(algorithm=self.codec_algorithm)
             
             compressed_data = {
